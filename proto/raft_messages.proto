@@ -1,0 +1,61 @@
+syntax = "proto3";
+
+package raftpb;
+option go_package = "pb/raftpb";
+
+// AskForVoteRequest represents vote request packet
+message AskForVoteRequest {
+  uint64 term = 1;             // which raft-term is going on from candidate's POV?
+  string candidateId = 2;      // the candidate for which this request is made
+  int32 lastLogIndex = 3;     // index of candidate's last log
+  int32 lastLogTerm = 4;      // term of candidate's last log
+  string groupName = 5;       // the raft group for which this election is happening
+}
+
+// AskForVoteRequest represents vote request packet
+// message AskForVoteRequest {
+//   uint64 term = 1;        // which raft-term is going on from candidate's POV?
+//   string candidate_id = 2;   // the candidate for which this request is made
+//   string group_name = 3; // the raft group for which this election is happening
+// }
+
+// AskForVoteResponse represents vote response packet
+message AskForVoteResponse {
+  uint64 term = 1;            // which term is going on from responder's POV ?
+  bool voteGranted = 2;       // Vote's status
+  string groupName = 3;       // the raft group for which this election is happening
+}
+
+// HeartBeatRequest represents heartbeat packet
+message HeartBeatRequest{
+  uint64 term = 1;    // Leader's current term
+  string leader_id = 2;  // Leader's ID
+  string group_name = 3; // the raft group for which this election is happening
+}
+
+// HeartBeatResponse represents heartbeat response packet
+message HeartBeatResponse {
+  uint64 term = 1;
+  bool success = 2;
+  string group_name = 3; // the raft group for which this election is happening
+}
+
+message LogEntry {
+  int32 term = 1;
+  string command = 2;
+}
+
+message AppendEntriesRequest {
+  uint64 term = 1;
+  string groupName = 2;
+  string leaderId = 3;
+  uint64 prevLogIndex = 4;
+  uint64 prevLogTerm = 5;
+  repeated LogEntry entries = 6;
+  uint64 leaderCommit = 7;
+}
+
+message AppendEntriesResponse {
+  uint64 term = 1;
+  bool success = 2;
+}

@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package raftpb;
+option go_package = "pb/raftpb";
+
+import "raft_messages.proto";
+
+// RaftService handles all the raft-related inter-node communication
+service RaftService{
+  // AskForVote is used to request votes from other nodes.
+  rpc AskForVote(AskForVoteRequest) returns (AskForVoteResponse);
+
+  // HeartBeat is used by leader to inform other nodes of it's health
+  rpc HeartBeat(HeartBeatRequest) returns (HeartBeatResponse);
+
+  // AppendEntries is used by leader to send log entries
+  rpc AppendEntries(AppendEntriesRequest) returns (AppendEntriesResponse);
+}
